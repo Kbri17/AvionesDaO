@@ -6,11 +6,13 @@ import model.Avion;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.List;
 
 public class DaoH2Avion implements IDao<Avion> {
     public static final Logger logger = Logger.getLogger(DaoH2Avion.class);
     public static final String INSERT = "INSERT INTO AVIONES VALUES (DEFAULT, ?,?,?,?)";
+    public static final String SELECT_ID = "SELECT * FROM AVIONES WHERE ID = ?";
 
 
     @Override
@@ -59,7 +61,40 @@ public class DaoH2Avion implements IDao<Avion> {
 
     @Override
     public Avion buscar(Integer id) {
-        return null;
+        Connection connection = null;
+        Avion avionEncontrado = null;
+
+        try{
+            connection = H2Connection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                Integer idDB = resultSet.getInt(1);
+                String marca = resultSet.getString(2);
+                String modelo = resultSet.getString(3);
+                String matricula = resultSet.getString(4);
+                LocalDate fechaEntradaServicio = resultSet.getDate(5).toLocalDate();
+                avionEncontrado = new Avion(idDB, marca, modelo, matricula, fechaEntradaServicio);
+            }
+            if(avionEncontrado!= null){
+                logger.info("avion encontrado "+ avionEncontrado);
+            } else {
+                logger.info("avion no encontrado");
+            }
+
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                logger.error(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return avionEncontrado;
     }
 
     @Override

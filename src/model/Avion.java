@@ -8,7 +8,6 @@ public class Avion {
     private String marca;
     private String modelo;
     private String matricula;
-
     private LocalDate fechaEntradaServicio;
 
     public Avion(String marca, String modelo, String matricula, LocalDate fechaEntradaServicio) {
