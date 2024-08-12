@@ -1,23 +1,28 @@
 package service;
 
 import dao.IDao;
-import model.Veterinario;
+import model.Avion;
 
 import java.util.List;
 
 public class AvionService {
-    private IDao<Veterinario> veterinarioIDao;
+    private IDao<Avion> avionIDao;
 
-    public AvionService(IDao<Veterinario> veterinarioIDao) {
-        this.veterinarioIDao = veterinarioIDao;
+    public AvionService(IDao<Avion> avionIDao) {
+        this.avionIDao = avionIDao;
     }
 
-    public Veterinario guardarVeterinario(Veterinario veterinario){
-        return veterinarioIDao.guardar(veterinario);
+    public Avion guardarAvion(Avion avion){
+        return avionIDao.guardar(avion);
     }
-    public List<Veterinario> listarTodos() {
-        return veterinarioIDao.listarTodos();
+    public  Avion buscarAvion(Integer id){
+        return  avionIDao.buscar(id);
     }
+
+    public List<Avion> listarTodos() {
+        return avionIDao.listarTodos();
+    }
+
 
 
     }
