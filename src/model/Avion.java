@@ -65,4 +65,15 @@ public class Avion {
     public void setFechaEntradaServicio(LocalDate fechaEntradaServicio) {
         this.fechaEntradaServicio = fechaEntradaServicio;
     }
+
+    @Override
+    public String toString() {
+        return "Avion{" +
+                "id=" + id +
+                ", marca='" + marca + '\'' +
+                ", modelo='" + modelo + '\'' +
+                ", matricula='" + matricula + '\'' +
+                ", fechaEntradaServicio=" + fechaEntradaServicio +
+                '}';
+    }
 }

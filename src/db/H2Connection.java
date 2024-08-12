@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class H2Connection {
     private final static String DB_JDBC_DRIVER = "org.h2.Driver";
-    private final static String DB_URL = "jdbc:h2:./BaseDatos/preexamen";
+    private final static String DB_URL = "jdbc:h2:./BaseDatos/aviones";
     private final static String DB_USER = "sa";
     private final static String DB_PASS = "sa";
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
