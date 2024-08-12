@@ -7,12 +7,15 @@ import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DaoH2Avion implements IDao<Avion> {
     public static final Logger logger = Logger.getLogger(DaoH2Avion.class);
     public static final String INSERT = "INSERT INTO AVIONES VALUES (DEFAULT, ?,?,?,?)";
     public static final String SELECT_ID = "SELECT * FROM AVIONES WHERE ID = ?";
+
+    public static final String SELECT_ALL = "SELECT * FROM AVIONES ";
 
 
     @Override
@@ -99,6 +102,35 @@ public class DaoH2Avion implements IDao<Avion> {
 
     @Override
     public List<Avion> listarTodos() {
-        return List.of();
+        Connection connection = null;
+        List<Avion> aviones = new ArrayList<>();
+        Avion avionDesdeLaDB = null;
+        try{
+            connection = H2Connection.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(SELECT_ALL);
+            while (resultSet.next()){
+                Integer idDB = resultSet.getInt(1);
+                String marca = resultSet.getString(2);
+                String modelo = resultSet.getString(3);
+                String matricula = resultSet.getString(4);
+                LocalDate fechaEntradaServicio = resultSet.getDate(5).toLocalDate();
+                avionDesdeLaDB = new Avion(idDB, marca, modelo, matricula, fechaEntradaServicio);
+                // vamos cargando la lista de aviones
+                aviones.add(avionDesdeLaDB);
+                logger.info("avion "+ avionDesdeLaDB);
+            }
+
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                logger.error(e.getMessage());
+            }
+        }
+        return aviones;
     }
-}
+    }
+
